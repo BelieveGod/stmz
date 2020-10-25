@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>登陆页面</title>
+    <link rel="stylesheet" href="../src/css/layui.css" th:href="@{/webjars/layui/2.5.6/css/layui.css}">
+    <style>
+        .stmz-login-box{
+            width: 375px;
+            margin: 150px auto;
+            border-sizing:border-box;
+        }
+
+
+
+        .stmz-login-header{
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stmz-login-header h2{
+            margin-bottom: 10px;
+            font-weight: 300;
+            font-size: 30px;
+            color: #000;
+        }
+
+        .stmz-login-body{
+            padding: 20px;
+        }
+
+        .stmz-login-body .layui-form-item{
+            position: relative;
+        }
+
+        .stmz-login-body .layui-form-item .layui-icon{
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 38px;
+            line-height: 36px;
+            text-align: center;
+            color: #d2d2d2;
+        }
+
+        .stmz-login-body .layui-form-item input{
+            padding-left: 38px;
+
+        }
+        .stmz-login-body .layui-form-item input::-webkit-input-placeholder{
+            color:#d2d2d2;
+        }
+
+    </style>
+</head>
+<body>
+<div class="stmz-login-box">
+    <div class="stmz-login-header">
+        <h2>松桃名族教师管理系统</h2>
+    </div>
+    <div class="stmz-login-body">
+        <form id="loginForm" name="loginForm" class="layui-form">
+            <div class="layui-form-item">
+                <label class=" layui-icon layui-icon-username"></label>
+                <input type="text" id="userName" name="userName" autocomplete="off" placeholder="用户名" class="layui-input"/>
+
+            </div>
+
+            <div class="layui-form-item">
+                <label class=" layui-icon layui-icon-password"></label>
+                <input type="password" id="password" name="password" autocomplete="off" placeholder="密码"  class="layui-input"/>
+            </div>
+            <div class="layui-form-item">
+                <button type="button" id="loginBtn" class="layui-btn layui-btn-fluid" lay-submit lay-filter="login">登录</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script src="../src/layui.js" th:src="@{/webjars/axios/0.20.0/dist/axios.js}"></script>
+<script src="../src/layui.js" th:src="@{/webjars/layui/2.5.6/layui.js}"></script>
+<script>
+    layui.use(['jquery','element','form','layer','layedit','table'],function($,element,form,layer,layedit,table){
+        $('#loginBtn').on('click',function () {
+            // var data = $('#loginFomr').serialize();
+
+            // 解决MVC 接收单字段的问题
+            var data=new URLSearchParams();
+            data.append("userName",$('#userName').val());
+            data.append("password",$('#password').val());
+
+            axios.post("/login",data).then(function (response) {
+                if(response.data.code==200){
+                    location.href="/manage";
+                }
+                else{
+                    layer.msg("登陆失败")
+                }
+            })
+        })
+
+        form.on('submit(login)',function(){
+            var data=new URLSearchParams();
+            data.append("userName",$('#userName').val());
+            data.append("password",$('#password').val());
+
+            axios.post("/login",data).then(function (response) {
+                if(response.data.code==200){
+                    location.href="/manage";
+                }
+                else{
+                    layer.msg("登陆失败");
+                }
+            })
+            return false;
+        })
+    });
+</script>
+</body>
+</html>

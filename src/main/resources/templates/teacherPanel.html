@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>教师列表</title>
+    <link rel="stylesheet" href="../src/css/layui.css" th:href="@{/webjars/layui/2.5.6/css/layui.css}">
+</head>
+<body>
+<!--<div class="demoTable">
+    搜索工号：
+    <div class="layui-inline">
+        <input class="layui-input" name="teacherSn" id="demoReload" autocomplete="off">
+    </div>
+    <button class="layui-btn" data-type="reload">搜索</button>
+</div>-->
+
+<Script type="text/html" id="toolBar01">
+    搜索工号：
+    <div class="layui-inline">
+        <input class="layui-input" name="teacherSn" id="demoReload" autocomplete="off">
+    </div>
+    <button class="layui-btn"  lay-event="search" data-type="reload">搜索</button>
+    <button class="layui-btn"  lay-event="reset"  data-type="reset" >重置</button>
+    <button class="layui-btn layui-bg-orange" lay-event="add" data-type="add"><i class="layui-icon layui-icon-add-1"></i>添加</button>
+</Script>
+
+<script type="text/html" id="tool01">
+    <!--<a class="layui-btn layui-btn-xs " lay-event="detail">查看</a>-->
+    <a class="layui-btn layui-btn-xs " lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+</script>
+
+<table id="demo" lay-filter="test"></table>
+<script src="../src/layui.js" th:src="@{/webjars/axios/0.20.0/dist/axios.js}"></script>
+<script src="../src/layui.js" th:src="@{/webjars/layui/2.5.6/layui.js}"></script>
+<script>
+    var pageApi={};
+    layui.use(['table','layer','element'], function(table,layer,element){
+        // var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,id: 'teacherTable'
+            ,toolbar: '#toolBar01'
+            // ,height: 312
+            ,url: '/teacher/teachers' //数据接口
+            ,page: true //开启分页
+            ,cols: [ [ //表头
+                {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+                ,{field: 'teacherSn', title: '工号', width:80}
+                ,{field: 'name', title: '姓名', width:80, sort: true}
+                ,{field: 'education', title: '学历', width:80}
+                ,{field: 'department', title: '部门', width: 177}
+                ,{field: 'office', title: '办公室', width: 80, sort: true}
+                ,{field: 'phone', title: '手机', width: 80, sort: true}
+                ,{field: 'salary', title: '工资', width: 80}
+                ,{field: 'subjectName', title: '科目', width: 135, sort: true}
+                ,{toolbar: '#tool01',align:'center',title:'操作'}
+            ]]
+        });
+
+        var $ = layui.$;
+         pageApi = {
+            reload: function(){
+                var demoReload = $('#demoReload');
+
+                //执行重载
+                table.reload('teacherTable', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        teacherSn: demoReload.val()
+
+                    }
+                }, 'data');
+            }
+            ,add:function(){
+                var frameId=Math.random();
+                window.top.pageApi.mainTab.tabAdd("/teacher/teacher",frameId,"增加教师");
+                 window.top.pageApi.mainTab.tabChange(frameId);
+            }
+            ,edit:function(teacherId) {
+                 var frameId = Math.random();
+                 window.top.pageApi.mainTab.tabAdd("/teacher/" + teacherId, frameId, "编辑教师");
+                 window.top.pageApi.mainTab.tabChange(frameId);
+             }
+             ,del:function (obj) {
+                 layer.confirm('真的删除行么', function(index){
+                     obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                     layer.close(index);
+                     //向服务端发送删除指令
+                     axios.delete('/teacher/'+obj.data.id);
+                 });
+             }
+        };
+
+        $('#toolBar01 .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            pageApi[type] ? pageApi[type].call(this) : '';
+        });
+
+        table.on('toolbar(test)',function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event) {
+                case 'search':
+                    // console.log(this);
+                    var type = $(this).data('type');
+                    pageApi[type] ? pageApi[type].call(this) : '';
+                    break;
+                case 'add':
+                    pageApi.add();
+
+                    break;
+            }
+        });
+
+        table.on('tool(test)',function(obj){
+            switch (obj.event) {
+                case 'edit':
+                    pageApi.edit(obj.data.id);
+                    break;
+                case 'del':
+                    pageApi.del(obj);
+                    break;
+            }
+        });
+
+    });
+</script>
+</body>
+</html>
