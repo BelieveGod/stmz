@@ -10,8 +10,8 @@ spring:
       maximum-pool-size: 20
       minimum-idle: 5
     initialization-mode: embedded
-    data:
-      - classpath:sql/schema.sql
+    #data:
+     # - classpath:sql/schema.sql
     sql-script-encoding: utf-8
 
 

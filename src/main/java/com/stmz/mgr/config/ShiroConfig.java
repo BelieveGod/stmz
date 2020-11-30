@@ -59,7 +59,7 @@ public class ShiroConfig {
         //登出
         filterChainMap.put("/logout", "logout");
         //对所有用户认证
-        filterChainMap.put("/**", "authc");
+//        filterChainMap.put("/**", "authc");
 
 
 
@@ -68,7 +68,7 @@ public class ShiroConfig {
         //首页
         shiroFilterFactoryBean.setSuccessUrl("/manage");
         //错误页面，认证不通过跳转
-        shiroFilterFactoryBean.setUnauthorizedUrl("/error");
+//        shiroFilterFactoryBean.setUnauthorizedUrl("/error");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainMap);
         return shiroFilterFactoryBean;
     }

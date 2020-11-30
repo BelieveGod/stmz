@@ -86,4 +86,15 @@ public class pageController {
     }
 
 
+    @RequestMapping("/test")
+    @ResponseBody
+    public Result test() throws Exception {
+        throw new Exception("test");
+    }
+
+    @RequestMapping("/msg")
+    @ResponseBody
+    public Result msg() throws Exception {
+        return Result.ok();
+    }
 }

@@ -1,5 +1,7 @@
 package com.stmz.mgr.support;
 
+import com.stmz.mgr.enumeration.StmzErrorInfoEnum;
+
 import java.io.Serializable;
 
 /**
@@ -62,10 +64,10 @@ public class Result implements Serializable {
     }
 
     public static Result ok(){
-        return new Result(200,"operation success",0,null);
+        return new Result(StmzErrorInfoEnum.SUCCESS.getResultCode(), StmzErrorInfoEnum.SUCCESS.getResultMsg(), 0, null);
     }
 
     public static Result fail(){
-        return new Result(400,"operation fail",0,null);
+        return new Result(StmzErrorInfoEnum.FAILD.getResultCode(),StmzErrorInfoEnum.FAILD.getResultMsg(),0,null);
     }
 }
