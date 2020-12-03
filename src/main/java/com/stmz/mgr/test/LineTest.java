@@ -18,11 +18,9 @@ import java.util.List;
  */
 public class LineTest {
 
-    Double min;
-    Double max;
-    Double A;
-    Double B;
-    Double C;
+    Line minLine;
+    Line maxLine;
+    Line offsetLine=new Line();
 
     Point[] points;
 
@@ -55,48 +53,77 @@ public class LineTest {
         Point start=points[0];
         Point end = points[points.length - 1];
 
-        A= getA(start, end);
-        B=getB(start, end);
-        C=getC(start,end);
+        offsetLine=getLine(start,end);
 
-        min=C;
-        max=C;
+        minLine=offsetLine;
+        maxLine=offsetLine;
 
         for (Point point : points) {
-            Double c = getIntercep(point);
-            min=Math.min(min,c);
-            max=Math.max(max,c);
+            Line line = getLine(offsetLine.A, offsetLine.B, point);
+            minLine=chooseMinLine(minLine,line);
+            maxLine=chooseMaxLine(maxLine,line);
         }
 
-        Point p1 = getP(start.x, min);
-        Point p2 = getP(end.x, min);
-        Point p3 = getP(start.x, max);
-        Point p4 = getP(end.x, max);
+
+        Line verticalLine1= getLine(offsetLine.B,-offsetLine.A,start);
+        Line verticalLine2 = getLine(offsetLine.B, -offsetLine.A, end);
+
+        Point p1 = getCrossPoint(maxLine, verticalLine1);
+        Point p2 =  getCrossPoint(maxLine,verticalLine2);
+
+        Point p3 = getCrossPoint(minLine,verticalLine1);
+        Point p4 = getCrossPoint(minLine,verticalLine2);
+
 
         System.out.println("p1,p2 = [" + p1+","+p2+"]");
         System.out.println("p3,p4 = [" + p3+","+p4+"]");
 
     }
 
-    public Double getA(Point p1,Point p2){
-        return p2.y-p1.y;
+
+    public Line getLine(Point p1,Point p2){
+        Line line = new Line();
+        line.A =p2.y-p1.y;
+        line.B=-(p2.x-p1.x);
+        line.C=-(p2.y*p1.x-p1.y*p2.x);
+        return line;
     }
 
-    public Double getB(Point p1,Point p2){
-        return -(p2.x-p1.x);
+    public Line getLine(Double a,Double b, Point p){
+        Line line =new Line();
+        line.A=a;
+        line.B=b;
+        line.C=-(a*p.x+b*p.y);
+        return line;
     }
 
-    public Double getC(Point p1,Point p2){
-        return -(p2.y*p1.x-p1.y*p2.x);
+    public Line chooseMinLine(Line l1,Line l2){
+        return l1.C>l2.C?l2:l1;
     }
 
-    public Double getIntercep(Point p){
-       return -(A*p.x+B*p.y);
+    public Line chooseMaxLine(Line l1,Line l2){
+        return l1.C<l2.C?l2:l1;
     }
 
-    public Point getP(Double x,Double c){
-        Double y=-(A/B*x+c/B);
+
+
+    /**
+     * 解方程组，求出交点,矩阵消元法
+     */
+    public Point getCrossPoint(Double a1,Double b1,Double c1,Double a2,Double b2,Double c2){
+        c1=-c1;
+        c2=-c2;
+
+        Double y = (c1*a2 - c2*a1)/(b1*a2-b2*a1);
+        Double x = (c1-b1*y)/a1;
         return new Point(x,y);
+    }
+
+    /**
+     * 解方程组，求出交点
+     */
+    public Point getCrossPoint(Line l1,Line l2){
+        return getCrossPoint(l1.A, l1.B, l1.C, l2.A, l2.B, l2.C);
     }
 
 
