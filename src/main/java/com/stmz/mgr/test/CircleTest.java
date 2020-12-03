@@ -1,6 +1,17 @@
 package com.stmz.mgr.test;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author LTJ
@@ -9,14 +20,16 @@ import org.junit.jupiter.api.Test;
  */
 public class CircleTest {
 
+
+
 //  半径
     private Double r;
 // 圆心
     private Point d=new Point();
 // 数组
-//    private Point[] a=new Point[]{new Point(0d,0d),new Point(0d,2d),new Point(1d,1d),new Point(1.7d,1.4d)};
-    private Point[] a=new Point[]{new Point(0d,0d),new Point(0d,4d),new Point(8d,4d)};
-    // 两点距离
+//    private Point[] a=new Point[]{new Point(0d,0d),new Point(0d,2d),new Point(1d,1d)};
+    private Point[] a;
+//     两点距离
     private Double distance(Point p1,Point p2){
         return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
     }
@@ -78,6 +91,35 @@ public class CircleTest {
         }
     }
 
+    @BeforeEach
+    public void setUP() throws IOException {
+        URL resource = this.getClass().getResource("/mock/mockData.txt");
+        String json = FileUtils.readFileToString(new File(resource.getFile()), "utf-8");
+        ObjectMapper mapper = new ObjectMapper();
+        List<List<Double>> lists=mapper.readValue(json, new TypeReference<List<List<Double>>>() {
+        });
+
+        a=new Point[lists.size()];
+//      填充数组这里巨坑，多是同一个对象，
+//        Arrays.fill(a,new Point());
+
+//      又一个巨坑，这种循环不能改变对象数组的内容
+//        for (Point point : a) {
+//            point = new Point();
+//        }
+        for (int i = 0; i < a.length; i++) {
+            a[i] = new Point();
+        }
+
+        for(int i=0;i<lists.size();i++){
+            a[i].x=lists.get(i).get(0);
+            a[i].y=lists.get(i).get(1);
+        }
+
+
+    }
+
+
     @Test
     public void test(){
         Double a=8d;
@@ -98,7 +140,7 @@ public class CircleTest {
                 MiniDiscWithPoint(a[i],i-1);
             }
         }
-        System.out.println(d.x+","+d.y+" R="+r);
+        System.out.println("["+d.x+","+d.y+"] R="+r);
     }
 
 
