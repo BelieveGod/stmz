@@ -108,7 +108,12 @@ public class GpsUtil {
 
 
 
-    private GpsUtil(){
-        throw new IllegalStateException("Utility class");
+//    private GpsUtil(){
+//        throw new IllegalStateException("Utility class");
+//    }
+
+    public void test(){
+        double[] doubles = wgs84ToGcj(113.904722333333, 22.969938);
+        System.out.println("[" + doubles[0] + "," + doubles[1] + "]");
     }
 }
