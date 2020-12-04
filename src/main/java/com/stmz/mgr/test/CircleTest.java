@@ -20,12 +20,31 @@ import java.util.List;
  */
 public class CircleTest {
 
+    @BeforeEach
+    public void setUP() throws IOException {
+        URL resource = this.getClass().getResource("/mock/mockData.txt");
+        String json = FileUtils.readFileToString(new File(resource.getFile()), "utf-8");
+        ObjectMapper mapper = new ObjectMapper();
+        List<List<Double>> lists=mapper.readValue(json, new TypeReference<List<List<Double>>>() {
+        });
 
+        a=new Point[lists.size()];
+        for (int i = 0; i < a.length; i++) {
+            a[i] = new Point();
+        }
+
+        for(int i=0;i<lists.size();i++){
+            a[i].x=lists.get(i).get(0);
+            a[i].y=lists.get(i).get(1);
+        }
+    }
 
 //  半径
     private Double r;
 // 圆心
     private Point d=new Point();
+    // 圆上一点
+    private Point thePoint = new Point();
 // 数组
 //    private Point[] a=new Point[]{new Point(0d,0d),new Point(0d,2d),new Point(1d,1d)};
     private Point[] a;
@@ -50,6 +69,9 @@ public class CircleTest {
         d.x=(p.x+q.x)/2.0;
         d.y=(p.y+q.y)/2.0;
         r=distance(p,q)/2;
+        // 记录圆上的一点
+        thePoint.x=p.x;thePoint.y=p.y;
+
         int k;
         double c1,c2,t1,t2,t3;
         for(k=0;k<n;k++){
@@ -60,6 +82,8 @@ public class CircleTest {
                 d.x=(c1*(p.y-a[k].y)-c2*(p.y-q.y))/((p.x-q.x)*(p.y-a[k].y)-(p.x-a[k].x)*(p.y-q.y));
                 d.y=(c1*(p.x-a[k].x)-c2*(p.x-q.x))/((p.y-q.y)*(p.x-a[k].x)-(p.y-a[k].y)*(p.x-q.x));
                 r=distance(d,a[k]);
+                // 记录圆上的一点
+                thePoint.x=a[k].x;thePoint.y=a[k].y;
             }
             else{
                 t1=distance(p,q);
@@ -67,12 +91,18 @@ public class CircleTest {
                 t3=distance(p,a[k]);
                 if(t1>=t2&&t1>=t3){
                     d.x=(p.x+q.x)/2.0;d.y=(p.y+q.y)/2.0;r=distance(p,q)/2.0;
+                    // 记录圆上的一点
+                    thePoint.x=p.x;thePoint.y=p.y;
                 }
                 else if(t2>=t1&&t2>=t3){
                     d.x=(a[k].x+q.x)/2.0;d.y=(a[k].y+q.y)/2.0;r=distance(a[k],q)/2.0;
+                    // 记录圆上的一点
+                    thePoint.x=q.x;thePoint.y=q.y;
                 }
                 else{
                     d.x=(a[k].x+p.x)/2.0;d.y=(a[k].y+p.y)/2.0;r=distance(a[k],p)/2.0;
+                    // 记录圆上的一点
+                    thePoint.x=p.x;thePoint.y=p.y;
                 }
             }
         }
@@ -82,6 +112,9 @@ public class CircleTest {
         d.x=(pi.x+a[0].x)/2.0;
         d.y=(pi.y+a[0].y)/2.0;
         r=distance(pi,a[0])/2.0;
+        // 记录圆上的一点
+        thePoint.x=a[0].x;thePoint.y=a[0].y;
+
         int j;
         for(j=1;j<n;j++){
             if(distance(d,a[j])<=r)continue;
@@ -91,33 +124,7 @@ public class CircleTest {
         }
     }
 
-    @BeforeEach
-    public void setUP() throws IOException {
-        URL resource = this.getClass().getResource("/mock/mockData.txt");
-        String json = FileUtils.readFileToString(new File(resource.getFile()), "utf-8");
-        ObjectMapper mapper = new ObjectMapper();
-        List<List<Double>> lists=mapper.readValue(json, new TypeReference<List<List<Double>>>() {
-        });
 
-        a=new Point[lists.size()];
-//      填充数组这里巨坑，多是同一个对象，
-//        Arrays.fill(a,new Point());
-
-//      又一个巨坑，这种循环不能改变对象数组的内容
-//        for (Point point : a) {
-//            point = new Point();
-//        }
-        for (int i = 0; i < a.length; i++) {
-            a[i] = new Point();
-        }
-
-        for(int i=0;i<lists.size();i++){
-            a[i].x=lists.get(i).get(0);
-            a[i].y=lists.get(i).get(1);
-        }
-
-
-    }
 
 
     @Test
@@ -132,6 +139,9 @@ public class CircleTest {
     public void test2(){
         int n=a.length;
         r=distance(a[0],a[1])/2.0;
+        // 记录圆上的一点
+        thePoint.x=a[0].x;thePoint.y=a[0].y;
+
         d.x=(a[0].x+a[1].x)/2.0;
         d.y=(a[0].y+a[1].y)/2.0;
         for(int i=2;i<n;i++){
@@ -141,6 +151,11 @@ public class CircleTest {
             }
         }
         System.out.println("["+d.x+","+d.y+"] R="+r);
+        Double distance = distance(d, thePoint);
+        System.out.println("圆上一点:"+thePoint.toString()+" distance:"+distance);
+
+        double getmeter = LocationUtils.getmeter(d.x, d.y, thePoint.x, thePoint.y);
+        System.out.println("圆上的范围误差：" + getmeter+"米");
     }
 
 

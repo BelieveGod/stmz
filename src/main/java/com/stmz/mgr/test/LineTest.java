@@ -78,6 +78,15 @@ public class LineTest {
         System.out.println("p1,p2 = [" + p1+","+p2+"]");
         System.out.println("p3,p4 = [" + p3+","+p4+"]");
 
+        double startDis = LocationUtils.getmeter(start.x, start.y, p1.x, p1.y);
+        double startDis2 = LocationUtils.getmeter(start.x, start.y, p3.x, p3.y);
+        System.out.println("startDis = " + startDis+"米");
+        System.out.println("startDis2 = " + startDis2+"米");
+
+        double endDis = LocationUtils.getmeter(end.x, end.y, p2.x, p2.y);
+        double endDis2 = LocationUtils.getmeter(end.x, end.y, p4.x, p4.y);
+        System.out.println("end = " + endDis+"米");
+        System.out.println("end = " + endDis2+"米");
     }
 
 
