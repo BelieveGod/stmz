@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import static com.stmz.mgr.test.Line.getLine;
+
 /**
  * @author LTJ
  * @version 1.0

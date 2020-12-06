@@ -70,7 +70,7 @@ public class CircleTest {
         d.y=(p.y+q.y)/2.0;
         r=distance(p,q)/2;
         // 记录圆上的一点
-        thePoint.x=p.x;thePoint.y=p.y;
+//        thePoint.x=p.x;thePoint.y=p.y;
 
         int k;
         double c1,c2,t1,t2,t3;
@@ -82,8 +82,14 @@ public class CircleTest {
                 d.x=(c1*(p.y-a[k].y)-c2*(p.y-q.y))/((p.x-q.x)*(p.y-a[k].y)-(p.x-a[k].x)*(p.y-q.y));
                 d.y=(c1*(p.x-a[k].x)-c2*(p.x-q.x))/((p.y-q.y)*(p.x-a[k].x)-(p.y-a[k].y)*(p.x-q.x));
                 r=distance(d,a[k]);
+                Double r2=distance(d,p);
+                Double r3=distance(d,q);
+                System.out.println("r = " + r);
+                System.out.println("r2="+r2);
+                System.out.println("r3="+r3);
+                System.out.println();
                 // 记录圆上的一点
-                thePoint.x=a[k].x;thePoint.y=a[k].y;
+//                thePoint.x=a[k].x;thePoint.y=a[k].y;
             }
             else{
                 t1=distance(p,q);
@@ -92,17 +98,17 @@ public class CircleTest {
                 if(t1>=t2&&t1>=t3){
                     d.x=(p.x+q.x)/2.0;d.y=(p.y+q.y)/2.0;r=distance(p,q)/2.0;
                     // 记录圆上的一点
-                    thePoint.x=p.x;thePoint.y=p.y;
+//                    thePoint.x=p.x;thePoint.y=p.y;
                 }
                 else if(t2>=t1&&t2>=t3){
                     d.x=(a[k].x+q.x)/2.0;d.y=(a[k].y+q.y)/2.0;r=distance(a[k],q)/2.0;
                     // 记录圆上的一点
-                    thePoint.x=q.x;thePoint.y=q.y;
+//                    thePoint.x=q.x;thePoint.y=q.y;
                 }
                 else{
                     d.x=(a[k].x+p.x)/2.0;d.y=(a[k].y+p.y)/2.0;r=distance(a[k],p)/2.0;
                     // 记录圆上的一点
-                    thePoint.x=p.x;thePoint.y=p.y;
+//                    thePoint.x=p.x;thePoint.y=p.y;
                 }
             }
         }
@@ -113,7 +119,7 @@ public class CircleTest {
         d.y=(pi.y+a[0].y)/2.0;
         r=distance(pi,a[0])/2.0;
         // 记录圆上的一点
-        thePoint.x=a[0].x;thePoint.y=a[0].y;
+//        thePoint.x=a[0].x;thePoint.y=a[0].y;
 
         int j;
         for(j=1;j<n;j++){
@@ -147,6 +153,7 @@ public class CircleTest {
         for(int i=2;i<n;i++){
             if(distance(d,a[i])<=r)continue;
             else{
+                thePoint.x=a[i].x;thePoint.y=a[i].y;
                 MiniDiscWithPoint(a[i],i-1);
             }
         }
