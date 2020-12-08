@@ -28,7 +28,7 @@ public class LineTest {
 
     @BeforeEach
     public void setUp() throws IOException {
-        URL resource = this.getClass().getResource("/mock/mockData2.txt");
+        URL resource = this.getClass().getResource("/mock/mockData3.txt");
         String json = FileUtils.readFileToString(new File(resource.getFile()), "utf-8");
 
         ObjectMapper objectMapper = new ObjectMapper();

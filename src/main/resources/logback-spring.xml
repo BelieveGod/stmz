@@ -71,7 +71,7 @@
     <appender-ref ref="INFO-FILE"/>
     <appender-ref ref="ERR-FILE"/>
   </root>
-  <logger name="com.stmz.mgr.StmzMgrApplication" level="DEBUG">
+  <logger name="com.stmz.mgr.StmzMgrApplication" level="INFO">
 <!--    <appender-ref ref="STDOUT"/>-->
   </logger>
 

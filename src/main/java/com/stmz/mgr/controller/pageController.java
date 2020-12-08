@@ -7,6 +7,7 @@ import com.stmz.mgr.entity.User;
 import com.stmz.mgr.service.TeacherService;
 import com.stmz.mgr.service.UserService;
 import com.stmz.mgr.support.Result;
+import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -89,7 +90,7 @@ public class pageController {
     @RequestMapping("/test")
     @ResponseBody
     public Result test() throws Exception {
-        throw new Exception("test");
+        return null;
     }
 
     @RequestMapping("/msg")
