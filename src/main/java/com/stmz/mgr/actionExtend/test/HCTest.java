@@ -1,7 +1,7 @@
-package com.stmz.mgr.test;
+package com.stmz.mgr.actionExtend.test;
 
-import com.stmz.mgr.support.HCNetSDK;
-import com.stmz.mgr.support.HCNetSDK.NET_DVR_JPEGPARA;
+import com.stmz.mgr.actionExtend.support.HCNetSDK;
+import com.stmz.mgr.actionExtend.support.HCNetSDK.NET_DVR_JPEGPARA;
 
 import java.io.File;
 import java.time.LocalDate;

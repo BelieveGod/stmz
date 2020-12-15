@@ -9,7 +9,7 @@
  * Created on 2009-9-14, 19:31:34
  */
 
-package com.stmz.mgr.support;
+package com.stmz.mgr.actionExtend.support;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
