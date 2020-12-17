@@ -52,13 +52,14 @@ public class MyWebSocketClient extends WebSocketClient {
 
     @Override
     public void onError(Exception ex) {
-        log.error("websocket error");
+        log.error("websocket error",ex);
     }
 
     public boolean connetRetry(int n) throws InterruptedException {
         boolean b=false;
         // 尝试重连五次
         for(int i=0;i<n;i++){
+            System.out.println("第"+i+"次连接......");
              b= this.connectBlocking();
             if(b) break;
         }
