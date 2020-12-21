@@ -15,11 +15,14 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 /**
@@ -98,4 +101,13 @@ public class pageController {
     public Result msg() throws Exception {
         return Result.ok();
     }
+
+    @RequestMapping(value = "/img", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE})
+    @ResponseBody
+    public BufferedImage img() throws Exception {
+
+        return ImageIO.read(this.getClass().getResourceAsStream("/static/img/logo.png"));
+    }
+
+
 }
